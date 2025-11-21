@@ -1,0 +1,85 @@
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: mongo_db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - microservices_network
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user_service
+    restart: always
+    environment:
+      MONGO_URL: mongodb://root:password@mongo:27017
+      MONGO_DB: user_db
+    ports:
+      - "8001:8000"
+    depends_on:
+      - mongo
+    networks:
+      - microservices_network
+
+  restaurant-service:
+    build:
+      context: ./restaurant-service
+      dockerfile: Dockerfile
+    container_name: restaurant_service
+    restart: always
+    environment:
+      MONGO_URL: mongodb://root:password@mongo:27017
+      MONGO_DB: restaurant_db
+    ports:
+      - "8003:8000"
+    depends_on:
+      - mongo
+    networks:
+      - microservices_network
+
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    container_name: order_service
+    restart: always
+    environment:
+      MONGO_URL: mongodb://root:password@mongo:27017
+      MONGO_DB: order_db
+    ports:
+      - "8002:8000"
+    depends_on:
+      - mongo
+    networks:
+      - microservices_network
+
+  shipper-service:
+    build:
+      context: ./shipper-service
+      dockerfile: Dockerfile
+    container_name: shipper_service
+    restart: always
+    environment:
+      MONGO_URL: mongodb://root:password@mongo:27017
+      MONGO_DB: shipper_db
+    ports:
+      - "8004:8000"
+    depends_on:
+      - mongo
+    networks:
+      - microservices_network
+
+volumes:
+  mongo_data:
+
+networks:
+  microservices_network:
+    driver: bridge
