@@ -6,12 +6,16 @@ from app.schemas import Restaurant, MenuItem
 async def create_restaurant(db: AsyncIOMotorDatabase, restaurant_data: Restaurant):
     """Create a new restaurant"""
     restaurants = db["restaurants"]
-    restaurant_dict = restaurant_data.model_dump()
+    restaurant_dict = restaurant_data.model_dump(exclude={"id"})
     restaurant_dict["menu_items"] = []
     result = await restaurants.insert_one(restaurant_dict)
     return {
         "id": str(result.inserted_id),
-        **restaurant_dict,
+        "name": restaurant_dict["name"],
+        "description": restaurant_dict["description"],
+        "address": restaurant_dict["address"],
+        "phone": restaurant_dict["phone"],
+        "menu_items": restaurant_dict["menu_items"],
     }
 
 
@@ -52,11 +56,11 @@ async def list_restaurants(db: AsyncIOMotorDatabase):
 
 
 async def create_menu_item(db: AsyncIOMotorDatabase, restaurant_id: str, menu_item: MenuItem):
-    """Add menu item to restaurant"""
+    """Create a menu item for a restaurant"""
     restaurants = db["restaurants"]
     try:
         item_id = str(ObjectId())
-        menu_item_dict = menu_item.model_dump()
+        menu_item_dict = menu_item.model_dump(exclude={"id"})
         menu_item_dict["id"] = item_id
         
         await restaurants.update_one(

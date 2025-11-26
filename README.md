@@ -125,10 +125,18 @@ If you want, I can now:
 - (B) Add pytest tests for `user-service` and `order-service`.
 - (C) Add healthchecks to `docker-compose.yml` and improve start ordering.
 
+## Additional Documentation
+
+**API Design Documentation:** See `API_DESIGN.md` for detailed API specifications including all endpoints, HTTP methods, request/response bodies, and business purposes for each service.
+
+**Demo Guide:** See `DEMO_GUIDE.md` for step-by-step instructions on running the system, testing APIs, and architectural Q&A talking points.
+
 ---
 Location of important scripts and files
 - `docker-compose.yml` — orchestrates Mongo + services
 - `smoke_test.ps1` — PowerShell smoke test script
+- `API_DESIGN.md` — Detailed API endpoint documentation (requirement 3.3)
+- `DEMO_GUIDE.md` — Demo walkthrough and architectural discussion points (requirement 4.3)
 - `user-service/`, `order-service/`, `restaurant-service/`, `shipper-service/` — service folders
 
 Contact me which next step you prefer and I will implement it.
